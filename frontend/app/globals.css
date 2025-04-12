@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.podcast-container {
+  overflow-y: auto;
+  height: calc(100vh - 4rem);
+  padding-bottom: 5rem;
+}
+
+.mobile-podcast-container {
+  overflow-y: auto;
+  height: calc(100vh - 8rem);
+  padding-bottom: 5rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mobile-podcast-container::-webkit-scrollbar {
+  display: none;
+}

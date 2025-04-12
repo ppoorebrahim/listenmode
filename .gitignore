@@ -1,0 +1,21 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Build artifacts
+/frontend/dist/
+/frontend/.next/
+/backend/dist/
+
+# Environment variables
+.env*
+!.env.example
+
+# Docker
+docker-compose.override.yml
+
+# IDE/OS specific
+.vscode/
+.idea/
+*.DS_Store 

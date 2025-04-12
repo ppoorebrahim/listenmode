@@ -1,0 +1,30 @@
+type Query {
+  hello: String
+  # Example queries (implement resolvers later)
+  # getUser(id: ID!): User
+  # getPodcast(id: ID!): Podcast
+  # listPodcasts: [Podcast]
+}
+
+# type Mutation {
+  # Example mutations (implement resolvers later)
+  # createUser(username: String!, email: String!): User
+  # createPodcast(title: String!, description: String, audioUrl: String!): Podcast
+# }
+
+type User {
+  id: ID!
+  username: String!
+  email: String # Add other relevant fields
+  podcasts: [Podcast] # Example relation
+}
+
+type Podcast {
+  id: ID!
+  title: String!
+  description: String
+  audioUrl: String! # URL to the audio file in MinIO
+  uploader: User!   # Example relation
+  createdAt: String # Consider using GraphQLDateTime scalar
+  # Add other relevant fields (duration, artworkUrl, etc.)
+} 

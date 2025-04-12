@@ -1,0 +1,13 @@
+FROM minio/minio:RELEASE.2023-07-21T21-12-44Z
+
+# کپی کردن اسکریپت init-minio.sh
+COPY init-minio.sh /init-minio.sh
+
+# کپی کردن فایل cors.json
+COPY cors.json /cors.json
+
+# دادن دسترسی اجرایی به mc و اسکریپت
+RUN chmod +x /opt/bin/mc && chmod +x /init-minio.sh
+
+# اجرای MinIO با اسکریپت اولیه
+CMD ["/init-minio.sh"]
