@@ -2,7 +2,26 @@
 
 import { Heart, MessageSquare, Play, Bookmark, Clock } from 'lucide-react'
 
-export default function MobilePodcastCard({ podcast }) {
+interface Podcast {
+  id: number;
+  title: string;
+  channel: string;
+  channelAvatar: string;
+  thumbnail: string;
+  duration: string;
+  likes: number;
+  comments: number;
+  views: number;
+  timeAgo: string;
+  audioUrl: string;
+}
+
+interface MobilePodcastCardProps {
+  podcast: Podcast;
+  onPlay: () => void;
+}
+
+export default function MobilePodcastCard({ podcast, onPlay }: MobilePodcastCardProps) {
   const {
     id,
     title,
@@ -26,7 +45,10 @@ export default function MobilePodcastCard({ podcast }) {
             className="h-full w-full object-cover" 
           />
           <div className="absolute inset-0 flex items-center justify-center">
-            <button className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-600/80 text-white">
+            <button 
+              onClick={onPlay}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-600/80 text-white"
+            >
               <Play className="h-6 w-6" fill="white" />
             </button>
           </div>
