@@ -1,0 +1,3 @@
+Logs collected successfully in /root/listenmode/all_logs.txt
+/root/listenmode/collect_logs.sh: line 101: warning: here-document at line 51 delimited by end-of-file (wanted `EOF')
+/root/listenmode/collect_logs.sh: line 51: EOF1~cat: command not found
