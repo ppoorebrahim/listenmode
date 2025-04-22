@@ -20,7 +20,7 @@ export default function MobileNavbar() {
         <Bookmark className="h-6 w-6" />
       </Link>
 
-      <Link href="/profile" className="flex items-center justify-center text-gray-400 hover:text-[#4639B3]">
+      <Link href="/auth" className="flex items-center justify-center text-gray-400 hover:text-[#4639B3]">
         <User className="h-6 w-6" />
       </Link>
     </div>

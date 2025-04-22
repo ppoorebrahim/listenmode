@@ -19,3 +19,35 @@
 .mobile-podcast-container::-webkit-scrollbar {
   display: none;
 }
+
+/* 🔥 دارک اسکرول گلوبال برای کل سایت */
+body,
+html,
+.podcast-container,
+.sidebar-scroll,
+.form-scroll {
+  scrollbar-color: #4B5563 #1F2937;
+  scrollbar-width: thin;
+}
+
+body::-webkit-scrollbar,
+.podcast-container::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar,
+.form-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+body::-webkit-scrollbar-track,
+.podcast-container::-webkit-scrollbar-track,
+.sidebar-scroll::-webkit-scrollbar-track,
+.form-scroll::-webkit-scrollbar-track {
+  background: #1F2937;
+}
+
+body::-webkit-scrollbar-thumb,
+.podcast-container::-webkit-scrollbar-thumb,
+.sidebar-scroll::-webkit-scrollbar-thumb,
+.form-scroll::-webkit-scrollbar-thumb {
+  background-color: #4B5563;
+  border-radius: 10px;
+}

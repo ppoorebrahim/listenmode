@@ -1,3 +1,4 @@
+// sidebar.tsx
 import Link from "next/link"
 import {
   Home,
@@ -15,12 +16,12 @@ import {
 
 export default function Sidebar() {
   return (
-    <div className="fixed left-0 top-16 hidden h-[calc(100vh-4rem)] w-16 overflow-y-auto border-r border-[#343434] bg-background md:block lg:w-64">
+    <div className="fixed left-0 top-16 hidden h-[calc(100vh-4rem)] overflow-y-auto bg-background md:block sidebar-scroll custom-scrollbar w-[75px] lg:w-64">
       <div className="flex h-full flex-col justify-between py-6 px-2 lg:px-4">
-        <div>
+        <div className="flex flex-col items-center lg:items-start">
           <Link
             href="/"
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-white hover:bg-muted hover:text-primary"
+            className="flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-white hover:text-primary"
           >
             <Home className="h-5 w-5" />
             <span className="hidden text-sm lg:block">Home</span>
@@ -28,7 +29,7 @@ export default function Sidebar() {
 
           <Link
             href="/explore"
-            className="mt-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-muted hover:text-primary"
+            className="mt-1 flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-gray-400 hover:text-primary"
           >
             <Compass className="h-5 w-5" />
             <span className="hidden text-sm lg:block">Explore</span>
@@ -36,7 +37,7 @@ export default function Sidebar() {
 
           <Link
             href="/history"
-            className="mt-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-muted hover:text-primary"
+            className="mt-1 flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-gray-400 hover:text-primary"
           >
             <Clock className="h-5 w-5" />
             <span className="hidden text-sm lg:block">History</span>
@@ -44,7 +45,7 @@ export default function Sidebar() {
 
           <Link
             href="/saved"
-            className="mt-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-muted hover:text-primary"
+            className="mt-1 flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-gray-400 hover:text-primary"
           >
             <Bookmark className="h-5 w-5" />
             <span className="hidden text-sm lg:block">Saved</span>
@@ -52,7 +53,7 @@ export default function Sidebar() {
 
           <Link
             href="/liked"
-            className="mt-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-muted hover:text-primary"
+            className="mt-1 flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-gray-400 hover:text-primary"
           >
             <Heart className="h-5 w-5" />
             <span className="hidden text-sm lg:block">Liked</span>
@@ -60,14 +61,14 @@ export default function Sidebar() {
 
           <Link
             href="/downloads"
-            className="mt-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-muted hover:text-primary"
+            className="mt-1 flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-gray-400 hover:text-primary"
           >
             <Download className="h-5 w-5" />
             <span className="hidden text-sm lg:block">Downloads</span>
           </Link>
 
-          <div className="mt-8 w-full border-t border-[#343434] pt-4">
-            <h3 className="mb-2 px-3 text-xs font-semibold uppercase text-gray-500 lg:block hidden">
+          <div className="mt-8 w-full pt-4 hidden lg:block">
+            <h3 className="mb-2 px-3 text-xs font-semibold uppercase text-gray-500">
               Subscriptions
             </h3>
             <div className="mt-2 flex w-full flex-col space-y-1">
@@ -79,7 +80,7 @@ export default function Sidebar() {
                 <Link
                   key={channel.id}
                   href={`/channel/${channel.id}`}
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-400 hover:bg-muted hover:text-primary"
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-400 hover:text-primary"
                 >
                   <div className="relative h-6 w-6 overflow-hidden rounded-full">
                     <img
@@ -95,13 +96,13 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="w-full border-t border-[#343434] pt-4">
-          <div className="flex flex-col items-center gap-3">
+        <div className="w-full pt-4">
+          <div className="flex flex-col items-center justify-center gap-3 lg:flex-row">
             {[Instagram, Youtube, Twitter, Send].map((Icon, i) => (
               <Link
                 key={i}
                 href="#"
-                className="flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-muted hover:text-secondary"
+                className="flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-primary"
               >
                 <Icon className="h-4 w-4" />
               </Link>
@@ -110,7 +111,7 @@ export default function Sidebar() {
 
           <Link
             href="/settings"
-            className="mt-6 flex w-full items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-muted hover:text-secondary"
+            className="mt-6 flex w-full items-center justify-center lg:justify-start gap-3 rounded-md px-3 py-2 text-gray-400 hover:text-primary"
           >
             <Settings className="h-5 w-5" />
             <span className="hidden text-sm lg:block">Settings</span>

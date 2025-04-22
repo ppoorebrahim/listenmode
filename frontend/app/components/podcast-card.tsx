@@ -4,7 +4,25 @@ import { useState } from "react"
 import { Heart, MessageSquare, Play, Bookmark } from "lucide-react"
 import { useAudioPlayer } from "@/components/AudioPlayerProvider"
 
-export default function PodcastCard({ podcast }) {
+interface Podcast {
+  id: string;
+  title: string;
+  file_url: string;
+  thumbnail?: string;
+  duration: string;
+  channel: string;
+  channelAvatar?: string;
+  likes: number;
+  comments: number;
+  views: number;
+  timeAgo: string;
+}
+
+interface PodcastCardProps {
+  podcast: Podcast;
+}
+
+export default function PodcastCard({ podcast }: PodcastCardProps) {
   const [liked, setLiked] = useState(false)
   const [bookmarked, setBookmarked] = useState(false)
   const { setAudio } = useAudioPlayer()

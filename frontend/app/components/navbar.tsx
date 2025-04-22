@@ -10,7 +10,7 @@ export default function Navbar() {
   const [searchFocused, setSearchFocused] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between border-b border-[#343434] bg-background px-4 md:px-6">
+    <header className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between bg-background px-4 md:px-6">
       <div className="flex items-center justify-between w-full md:w-auto">
         <Link href="/" className="flex items-center gap-2">
           <div className="h-8 w-8 relative">
@@ -29,8 +29,10 @@ export default function Navbar() {
           <input
             type="search"
             placeholder="Search podcasts..."
-            className={`w-full bg-muted pl-10 pr-4 py-2 rounded-md text-white placeholder:text-gray-400 border transition-colors ${
-              searchFocused ? "border-primary bg-[#1A1A1A]" : "border-transparent"
+            className={`w-full h-9 pl-10 pr-4 rounded-md text-white placeholder:text-gray-400 border transition-colors ${
+              searchFocused
+                ? "border-primary bg-[#2a2a2a]"
+                : "bg-muted border-transparent hover:bg-[#262626]"
             } focus:outline-none`}
             value={searchQuery}
             onFocus={() => setSearchFocused(true)}
@@ -41,16 +43,19 @@ export default function Navbar() {
       </div>
 
       <div className="hidden md:flex items-center gap-3">
-        <button className="rounded-full bg-primary px-4 py-2 text-white hover:bg-primary/90 flex items-center transition">
+        <button className="h-9 text-sm rounded-full bg-primary px-4 text-white hover:bg-primary/90 flex items-center transition">
           <Plus className="mr-1 h-4 w-4" />
           <span>Upload</span>
         </button>
         <button className="text-gray-400 hover:text-primary p-2 transition">
           <Bell className="h-5 w-5" />
         </button>
-        <div className="h-8 w-8 rounded-full bg-[#272727] flex items-center justify-center cursor-pointer text-white hover:text-secondary transition">
-          <User className="h-4 w-4" />
-        </div>
+        <Link
+          href="/auth"
+          className="h-8 w-8 rounded-full bg-[#272727] flex items-center justify-center cursor-pointer text-gray-400 hover:text-primary transition"
+        >
+          <User className="h-5 w-5" />
+        </Link>
       </div>
     </header>
   )
