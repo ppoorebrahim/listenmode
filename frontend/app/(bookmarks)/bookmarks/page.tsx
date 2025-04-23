@@ -85,7 +85,7 @@ export default function BookmarksPage() {
   if (!isMounted) return null
 
   return (
-    <div className="bg-black min-h-screen overflow-y-auto scrollbar-none">
+    <div className="bg-black min-h-screen overflow-y-auto scrollbar-none pb-24">
       <div className="px-3 pb-20">
         {/* Tabs */}
         <div className="flex justify-between items-center mb-4">

@@ -18,7 +18,7 @@ export default function MobileNavbar() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around bg-[#1A1A1A] px-6 md:hidden">
       {navItems.map(({ href, icon: Icon }) => {
-        const isActive = pathname === href
+        const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href)
         return (
           <Link
             key={href}
