@@ -1,111 +1,76 @@
 "use client"
 
-import { createContext, useContext, useState, useRef, useEffect } from "react"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  ReactNode,
+} from "react"
 
-interface AudioPlayerContextType {
+interface AudioContextProps {
   audioUrl: string
   title: string
   show: string
   duration: string
   thumbnailUrl: string
-  isPlaying: boolean
-  setAudio: (audio: {
-    audioUrl: string
-    title: string
-    show: string
-    duration: string
-    thumbnailUrl: string
-  }) => void
+}
+
+interface AudioPlayerContextType {
+  audio: AudioContextProps | null
+  setAudio: (audio: AudioContextProps | null) => void
+  isVisible: boolean
+  showPlayer: () => void
+  hidePlayer: () => void
   togglePlay: () => void
-  stop: () => void
-  visible: boolean
-  closePlayer: () => void
+  audioRef: React.RefObject<HTMLAudioElement>
 }
 
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined)
 
-export function AudioPlayerProvider({ children }: { children: React.ReactNode }) {
-  const [audioUrl, setAudioUrl] = useState("")
-  const [title, setTitle] = useState("")
-  const [show, setShow] = useState("")
-  const [duration, setDuration] = useState("0:00")
-  const [thumbnailUrl, setThumbnailUrl] = useState("")
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
+  const [audio, setAudio] = useState<AudioContextProps | null>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
 
-  useEffect(() => {
-    if (!audioRef.current) {
-      const audio = new Audio()
-      audioRef.current = audio
-      audio.addEventListener("ended", () => setIsPlaying(false))
-    }
-  }, [])
+  const showPlayer = () => setIsVisible(true)
 
-  const setAudio = ({
-    audioUrl,
-    title,
-    show,
-    duration,
-    thumbnailUrl,
-  }: {
-    audioUrl: string
-    title: string
-    show: string
-    duration: string
-    thumbnailUrl: string
-  }) => {
-    setAudioUrl(audioUrl)
-    setTitle(title)
-    setShow(show)
-    setDuration(duration)
-    setThumbnailUrl(thumbnailUrl)
-    setVisible(true)
+  const hidePlayer = () => {
+    setIsVisible(false)
     if (audioRef.current) {
-      audioRef.current.src = audioUrl
-      audioRef.current.play().catch((err) => console.error("Playback error:", err))
-      setIsPlaying(true)
+      audioRef.current.pause()
     }
   }
 
   const togglePlay = () => {
-    if (!audioRef.current) return
-    if (isPlaying) {
-      audioRef.current.pause()
+    const el = audioRef.current
+    if (!el) return
+    if (el.paused) {
+      el.play()
     } else {
-      audioRef.current.play().catch((err) => console.error("Playback error:", err))
+      el.pause()
     }
-    setIsPlaying(!isPlaying)
   }
 
-  const stop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-    }
-    setIsPlaying(false)
-  }
+  useEffect(() => {
+    const el = audioRef.current
+    if (!el) return
 
-  const closePlayer = () => {
-    stop()
-    setVisible(false)
-  }
+    const onEnded = () => {
+      setAudio(null)
+      setIsVisible(false)
+    }
+
+    el.addEventListener("ended", onEnded)
+    return () => {
+      el.removeEventListener("ended", onEnded)
+    }
+  }, [])
 
   return (
     <AudioPlayerContext.Provider
-      value={{
-        audioUrl,
-        title,
-        show,
-        duration,
-        thumbnailUrl,
-        isPlaying,
-        setAudio,
-        togglePlay,
-        stop,
-        visible,
-        closePlayer,
-      }}
+      value={{ audio, setAudio, isVisible, showPlayer, hidePlayer, togglePlay, audioRef }}
     >
       {children}
     </AudioPlayerContext.Provider>

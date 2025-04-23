@@ -56,7 +56,7 @@ export default function Home() {
 
   if (!isMounted) {
     return (
-      <div className="podcast-container px-4 py-6">
+      <div className="podcast-container px-3 pb-6 pt-3 bg-transparent isolate">
         <p className="text-gray-400">Loading podcasts...</p>
       </div>
     )
@@ -65,7 +65,7 @@ export default function Home() {
   const displayPodcasts = podcasts.length > 0 ? podcasts : mockPodcasts
 
   return (
-    <div className="podcast-container px-4 py-6">
+    <div className="podcast-container px-3 pb-6 pt-3 bg-transparent isolate">
       {loading ? (
         <p className="text-gray-400">Loading podcasts...</p>
       ) : displayPodcasts.length === 0 ? (
@@ -73,15 +73,15 @@ export default function Home() {
       ) : (
         <div>
           <div className="hidden grid-cols-1 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {displayPodcasts.map((podcast) => (
-              <PodcastCard key={podcast.id} podcast={podcast} />
-            ))}
+            {displayPodcasts.map((podcast, i) =>
+              podcast ? <PodcastCard key={podcast.id || i} podcast={podcast} /> : null
+            )}
           </div>
 
           <div className="mobile-podcast-container md:hidden">
-            {displayPodcasts.map((podcast) => (
-              <MobilePodcastCard key={podcast.id} podcast={podcast} />
-            ))}
+            {displayPodcasts.map((podcast, i) =>
+              podcast ? <MobilePodcastCard key={podcast.id || i} podcast={podcast} /> : null
+            )}
           </div>
         </div>
       )}

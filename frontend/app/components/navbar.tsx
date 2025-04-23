@@ -1,11 +1,18 @@
 "use client"
 
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 import Link from "next/link"
-import { Bell, Plus, Search, Headphones, User } from "lucide-react"
+import { Bell, Plus, Search, User } from "lucide-react"
 import Image from "next/image"
 
 export default function Navbar() {
+  const pathname = usePathname()
+
+  // مسیرهایی که نباید نوار بالا نمایش داده بشه
+  const hiddenRoutes = ["/auth", "/bookmarks", "/search"]
+  if (hiddenRoutes.includes(pathname)) return null
+
   const [searchQuery, setSearchQuery] = useState("")
   const [searchFocused, setSearchFocused] = useState(false)
 
@@ -13,10 +20,10 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 flex h-16 items-center justify-between bg-background px-4 md:px-6">
       <div className="flex items-center justify-between w-full md:w-auto">
         <Link href="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 relative">
-            <Image src="/LogoMark_40-40.svg" alt="Logo" width={32} height={32} />
+          <div className="h-10 w-10 relative">
+            <Image src="/LogoMark_40-40.svg" alt="Logo" width={40} height={40} />
           </div>
-          <span className="text-lg font-bold text-white hidden md:inline">Listenmode</span>
+          <span className="text-lg font-bold text-white">Listenmode</span>
         </Link>
         <div className="md:hidden">
           <Bell className="text-foreground" />

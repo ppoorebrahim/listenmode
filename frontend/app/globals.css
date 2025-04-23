@@ -2,15 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --vh: 1vh;
+}
+
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
 .podcast-container {
   overflow-y: auto;
   height: calc(100vh - 4rem);
   padding-bottom: 5rem;
 }
 
+@media (max-width: 768px) {
+  .podcast-container {
+    overflow-y: hidden;
+  }
+}
+
 .mobile-podcast-container {
+  height: calc(var(--vh, 1vh) * 100 - 8rem);
   overflow-y: auto;
-  height: calc(100vh - 8rem);
   padding-bottom: 5rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -20,7 +37,15 @@
   display: none;
 }
 
-/* 🔥 دارک اسکرول گلوبال برای کل سایت */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 body,
 html,
 .podcast-container,
