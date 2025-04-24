@@ -7,7 +7,7 @@ import { useAudioPlayer } from "@/components/AudioPlayerProvider"
 export default function MobilePodcastCard({ podcast }) {
   const [liked, setLiked] = useState(false)
   const [bookmarked, setBookmarked] = useState(false)
-  const { setAudio } = useAudioPlayer()
+  const { setAudio, showPlayer } = useAudioPlayer() // ✅ اضافه کردن showPlayer
 
   const {
     id,
@@ -24,13 +24,19 @@ export default function MobilePodcastCard({ podcast }) {
   } = podcast
 
   const handlePlay = () => {
+    if (!file_url) {
+      console.warn("No audio file_url found", { podcast }); // ✅ دیباگ
+      return;
+    }
+    console.log("Playing podcast with file_url:", file_url); // ✅ دیباگ
     setAudio({
-      audioUrl: file_url || "",
+      audioUrl: file_url,
       title: title,
       show: channel,
       duration: duration,
       thumbnailUrl: thumbnail || "/placeholder.svg",
     })
+    showPlayer(); // ✅ فراخوانی showPlayer برای اطمینان از نمایش پلیر
   }
 
   const toggleLike = () => {

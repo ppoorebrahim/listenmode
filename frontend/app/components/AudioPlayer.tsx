@@ -1,5 +1,3 @@
-// AudioPlayer.tsx - desktop player
-
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -21,14 +19,15 @@ const playbackRates = [0.5, 1, 1.5, 2]
 
 export default function AudioPlayer() {
   const {
-    audioUrl,
-    title,
-    show,
-    visible,
-    closePlayer,
+    audio,
+    isVisible,
+    hidePlayer,
+    audioRef,
   } = useAudioPlayer()
 
-  const audioRef = useRef(null)
+  // ✅ دیباگ وضعیت نمایش پلیر
+  console.log("AudioPlayer DEBUG => isVisible:", isVisible, "audio:", audio)
+
   const progressRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [volume, setVolume] = useState(1)
@@ -39,20 +38,20 @@ export default function AudioPlayer() {
   const [liked, setLiked] = useState(false)
 
   useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-    const update = () => setCurrentTime(audio.currentTime)
+    const audioEl = audioRef.current
+    if (!audioEl) return
+    const update = () => setCurrentTime(audioEl.currentTime)
     const onEnd = () => {
       setIsPlaying(false)
       setCurrentTime(0)
     }
-    audio.addEventListener("timeupdate", update)
-    audio.addEventListener("durationchange", () => setDuration(audio.duration))
-    audio.addEventListener("ended", onEnd)
+    audioEl.addEventListener("timeupdate", update)
+    audioEl.addEventListener("durationchange", () => setDuration(audioEl.duration))
+    audioEl.addEventListener("ended", onEnd)
     return () => {
-      audio.removeEventListener("timeupdate", update)
-      audio.removeEventListener("durationchange", () => {})
-      audio.removeEventListener("ended", onEnd)
+      audioEl.removeEventListener("timeupdate", update)
+      audioEl.removeEventListener("durationchange", () => {})
+      audioEl.removeEventListener("ended", onEnd)
     }
   }, [])
 
@@ -64,14 +63,15 @@ export default function AudioPlayer() {
   }, [volume, isMuted])
 
   useEffect(() => {
-    if (audioRef.current && audioUrl) {
-      audioRef.current.src = audioUrl
+    if (audioRef.current && audio?.audioUrl) {
+      audioRef.current.src = audio.audioUrl
       audioRef.current.play().catch(() => {})
       setIsPlaying(true)
     }
-  }, [audioUrl])
+  }, [audio?.audioUrl])
 
-  if (!visible || !audioUrl) return null
+  // ✅ شرط نمایش پلیر
+  if (!isVisible || !audio?.audioUrl) return null
 
   const togglePlayPause = () => {
     if (!audioRef.current) return
@@ -131,8 +131,8 @@ export default function AudioPlayer() {
           <div className="w-8 h-8 bg-[#4639B3] rounded-full" />
         </div>
         <div className="flex flex-col">
-          <h3 className="text-sm font-semibold truncate">{title}</h3>
-          <span className="text-xs text-gray-400 mt-1">{show}</span>
+          <h3 className="text-sm font-semibold truncate">{audio.title}</h3>
+          <span className="text-xs text-gray-400 mt-1">{audio.show}</span>
         </div>
       </div>
 
@@ -141,14 +141,8 @@ export default function AudioPlayer() {
           <button onClick={skipBackward} className="p-2 hover:bg-[#4639B3] rounded-full">
             <Rewind size={20} />
           </button>
-          <button className="p-2 hover:bg-[#4639B3] rounded-full">
-            <SkipBack size={20} />
-          </button>
           <button onClick={togglePlayPause} className="p-2 hover:bg-[#4639B3] rounded-full">
             {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-          </button>
-          <button className="p-2 hover:bg-[#4639B3] rounded-full">
-            <SkipForward size={20} />
           </button>
           <button onClick={skipForward} className="p-2 hover:bg-[#4639B3] rounded-full">
             <FastForward size={20} />
@@ -191,7 +185,7 @@ export default function AudioPlayer() {
         <button onClick={() => setLiked(!liked)} className="hover:text-[#4639B3]">
           <Heart size={20} fill={liked ? "red" : "none"} />
         </button>
-        <button onClick={closePlayer} className="p-2 hover:bg-[#4639B3] rounded-full" aria-label="Close player">
+        <button onClick={hidePlayer} className="p-2 hover:bg-[#4639B3] rounded-full" aria-label="Close player">
           <X size={20} />
         </button>
       </div>

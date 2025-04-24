@@ -30,7 +30,7 @@ interface AudioPlayerContextType {
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined)
 
 export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
-  const [audio, setAudio] = useState<AudioContextProps | null>(null)
+  const [audio, _setAudio] = useState<AudioContextProps | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -53,12 +53,19 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const setAudio = (audioData: AudioContextProps | null) => {
+    _setAudio(audioData)
+    if (audioData) {
+      setIsVisible(true) // نمایش پلیر هنگام ست کردن صدا
+    }
+  }
+
   useEffect(() => {
     const el = audioRef.current
     if (!el) return
 
     const onEnded = () => {
-      setAudio(null)
+      _setAudio(null)
       setIsVisible(false)
     }
 

@@ -41,8 +41,8 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
         <Player_MobileView />
       </div>
 
-      {/* پلیر دسکتاپ */}
-      <div className="hidden md:block">
+      {/* پلیر دسکتاپ - ثابت در پایین صفحه با z-index مناسب */}
+      <div className="hidden md:fixed md:bottom-0 md:left-0 md:right-0 md:z-50 md:block">
         <AudioPlayer />
       </div>
     </div>

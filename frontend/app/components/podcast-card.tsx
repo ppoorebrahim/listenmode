@@ -25,29 +25,32 @@ interface PodcastCardProps {
 export default function PodcastCard({ podcast }: PodcastCardProps) {
   const [liked, setLiked] = useState(false)
   const [bookmarked, setBookmarked] = useState(false)
-  const { setAudio } = useAudioPlayer()
+  const { setAudio, showPlayer } = useAudioPlayer()
 
   const {
-    id,
     title,
     channel,
-    channelAvatar,
     thumbnail,
     duration,
     likes,
     comments,
     views,
     timeAgo,
+    file_url,
   } = podcast
 
   const handlePlay = () => {
+    if (!file_url) return console.warn("No audio file_url found")
+
     setAudio({
-      audioUrl: podcast.file_url || "",
+      audioUrl: file_url,
       title: title,
       show: channel,
       duration: duration,
       thumbnailUrl: thumbnail || "/placeholder.svg",
     })
+
+    showPlayer()
   }
 
   return (
