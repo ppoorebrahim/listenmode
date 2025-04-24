@@ -28,7 +28,7 @@ body {
 .mobile-podcast-container {
   height: calc(var(--vh, 1vh) * 100 - 8rem);
   overflow-y: auto;
-  padding-bottom: 5rem;
+  padding: 0.5rem 0 5rem; /* فاصله بالا کاهش یافت به ۸px */
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

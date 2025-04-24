@@ -16,7 +16,7 @@ export default function MobileNavbar() {
   const pathname = usePathname()
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around bg-[#1A1A1A] px-6 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-4 h-16 items-center bg-[#1A1A1A]/10 backdrop-blur-[16px] md:hidden">
       {navItems.map(({ href, icon: Icon }) => {
         const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href)
         return (
@@ -24,7 +24,7 @@ export default function MobileNavbar() {
             key={href}
             href={href}
             className={clsx(
-              "flex items-center justify-center transition",
+              "flex items-center justify-center h-full transition",
               isActive ? "text-[#4639B3]" : "text-white/70 hover:text-[#4639B3]"
             )}
           >

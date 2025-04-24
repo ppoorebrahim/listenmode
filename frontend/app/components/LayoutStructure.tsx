@@ -14,23 +14,34 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
   const disableScrollbarOnMobile = ["/search", "/bookmarks", "/auth"].some(p => pathname.startsWith(p));
 
   return (
-    <div className={`flex flex-col min-h-[100dvh] ${isHomePage ? 'pt-16' : 'pt-3'}`}>
+    <div
+      className={clsx(
+        "flex flex-col min-h-[100dvh] text-white bg-black",
+        isHomePage ? "pt-16" : "pt-3"
+      )}
+    >
       <div className="flex flex-1 relative">
         {!isAuthPage && <Sidebar />}
         <main
           className={clsx(
             !isAuthPage && "md:ml-16 lg:ml-64",
-            "w-full overflow-y-auto",
-            disableScrollbarOnMobile && "scrollbar-none md:scrollbar"
+            "flex-1",
+            disableScrollbarOnMobile ? "scrollbar-none md:scrollbar" : "overflow-y-auto"
           )}
         >
-          {children}
+          <div className="w-full min-h-[100dvh] pb-28 px-0">
+            {children}
+          </div>
         </main>
       </div>
+
+      {/* نوار پایین موبایل - همیشه ثابت و جدا از محتوا */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
         <MobileNavbar />
         <Player_MobileView />
       </div>
+
+      {/* پلیر دسکتاپ */}
       <div className="hidden md:block">
         <AudioPlayer />
       </div>
