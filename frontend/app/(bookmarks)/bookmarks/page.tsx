@@ -6,7 +6,8 @@ import {
   Heart,
   Bookmark,
   Download,
-  Rss
+  Rss,
+  Search as SearchIcon
 } from "lucide-react"
 import MobilePodcastCard from "@/components/mobile-podcast-card"
 
@@ -19,58 +20,10 @@ const tabs = [
 ]
 
 const mockData = [
-  {
-    id: 1,
-    title: "Sample Podcast Episode",
-    channel: "Sample Channel",
-    channelAvatar: "/placeholder.svg",
-    thumbnail: "/placeholder.svg",
-    duration: "24:00",
-    likes: 10,
-    comments: 3,
-    views: 150,
-    timeAgo: "Yesterday",
-    file_url: ""
-  },
-  {
-    id: 2,
-    title: "Another Episode Title",
-    channel: "Sample Channel",
-    channelAvatar: "/placeholder.svg",
-    thumbnail: "/placeholder.svg",
-    duration: "19:12",
-    likes: 23,
-    comments: 7,
-    views: 280,
-    timeAgo: "Yesterday",
-    file_url: ""
-  },
-  {
-    id: 3,
-    title: "Third Episode",
-    channel: "Sample Channel",
-    channelAvatar: "/placeholder.svg",
-    thumbnail: "/placeholder.svg",
-    duration: "33:00",
-    likes: 15,
-    comments: 5,
-    views: 200,
-    timeAgo: "Yesterday",
-    file_url: ""
-  },
-  {
-    id: 4,
-    title: "Last Shown Podcast",
-    channel: "Sample Channel",
-    channelAvatar: "/placeholder.svg",
-    thumbnail: "/placeholder.svg",
-    duration: "28:45",
-    likes: 7,
-    comments: 1,
-    views: 98,
-    timeAgo: "Yesterday",
-    file_url: ""
-  }
+  { id: 1, title: "Sample Podcast Episode", channel: "Sample Channel", channelAvatar: "/placeholder.svg", thumbnail: "/placeholder.svg", duration: "24:00", likes: 10, comments: 3, views: 150, timeAgo: "Yesterday", file_url: "" },
+  { id: 2, title: "Another Episode Title", channel: "Sample Channel", channelAvatar: "/placeholder.svg", thumbnail: "/placeholder.svg", duration: "19:12", likes: 23, comments: 7, views: 280, timeAgo: "Yesterday", file_url: "" },
+  { id: 3, title: "Third Episode", channel: "Sample Channel", channelAvatar: "/placeholder.svg", thumbnail: "/placeholder.svg", duration: "33:00", likes: 15, comments: 5, views: 200, timeAgo: "Yesterday", file_url: "" },
+  { id: 4, title: "Last Shown Podcast", channel: "Sample Channel", channelAvatar: "/placeholder.svg", thumbnail: "/placeholder.svg", duration: "28:45", likes: 7, comments: 1, views: 98, timeAgo: "Yesterday", file_url: "" }
 ]
 
 export default function BookmarksPage() {
@@ -85,10 +38,10 @@ export default function BookmarksPage() {
   if (!isMounted) return null
 
   return (
-    <div className="bg-black min-h-screen overflow-y-auto scrollbar-none pb-24">
+    <div className="bg-black min-h-screen overflow-y-auto pb-24">
       <div className="px-3 pb-20">
         {/* Tabs */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="grid grid-cols-5 gap-2 justify-between items-center mb-4">
           {tabs.map((tab) => {
             const Icon = tab.icon
             const isActive = tab.label === activeTab
@@ -98,18 +51,14 @@ export default function BookmarksPage() {
                 onClick={() => setActiveTab(tab.label)}
                 className="flex flex-col items-center focus:outline-none"
               >
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    isActive ? "bg-[#4639B3] text-white" : "bg-[#2A2A2A] text-gray-400"
-                  }`}
-                >
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                  isActive ? "bg-[#4639B3] text-white" : "bg-zinc-900 text-gray-400"
+                }`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span
-                  className={`text-xs mt-[6px] ${
-                    isActive ? "text-white" : "text-gray-400"
-                  }`}
-                >
+                <span className={`text-xs mt-[6px] ${
+                  isActive ? "text-[#4639B3] font-semibold" : "text-gray-400"
+                }`}>
                   {tab.label}
                 </span>
               </button>
@@ -118,13 +67,14 @@ export default function BookmarksPage() {
         </div>
 
         {/* Search */}
-        <div className="mb-4">
+        <div className="mb-4 relative top-[2px]">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
           <input
             type="text"
             placeholder={`Search in ${activeTab.toLowerCase()}`}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#1A1A1A] rounded-md px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none"
+            className="w-full text-sm pl-10 rounded-full px-4 py-2 bg-zinc-900 text-white placeholder:text-zinc-500 focus:placeholder:text-zinc-600 border border-zinc-900 focus:outline-none"
           />
         </div>
 

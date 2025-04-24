@@ -25,11 +25,11 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
         <main
           className={clsx(
             !isAuthPage && "md:ml-16 lg:ml-64",
-            "flex-1",
-            disableScrollbarOnMobile ? "scrollbar-none md:scrollbar" : "overflow-y-auto"
+            "flex-1 overflow-y-auto",
+            disableScrollbarOnMobile && "scrollbar-none md:scrollbar"
           )}
         >
-          <div className="w-full min-h-[100dvh] pb-28 px-0">
+          <div className="w-full flex-1 pb-28 px-0">
             {children}
           </div>
         </main>
