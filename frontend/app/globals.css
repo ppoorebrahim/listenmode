@@ -11,17 +11,35 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  -ms-overflow-style: none; /* IE/Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
+}
+
+/* Scrollable but hidden scrollbars globally */
+.scrollbar-none,
+.sidebar-scroll,
+.podcast-container,
+.form-scroll,
+.scrollable-container {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar,
+.podcast-container::-webkit-scrollbar,
+.form-scroll::-webkit-scrollbar,
+.scrollable-container::-webkit-scrollbar {
+  display: none;
 }
 
 .podcast-container {
-  overflow-y: auto;
   height: calc(100vh - 4rem);
   padding-bottom: 5rem;
 }
@@ -44,57 +62,7 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollable-container {
-  overflow-y: auto;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollable-container::-webkit-scrollbar {
-  display: none;
-}
-
-body,
-html,
-.podcast-container,
-.sidebar-scroll,
-.form-scroll {
-  scrollbar-color: #4B5563 #1F2937;
-  scrollbar-width: thin;
-}
-
-body::-webkit-scrollbar,
-.podcast-container::-webkit-scrollbar,
-.sidebar-scroll::-webkit-scrollbar,
-.form-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-body::-webkit-scrollbar-track,
-.podcast-container::-webkit-scrollbar-track,
-.sidebar-scroll::-webkit-scrollbar-track,
-.form-scroll::-webkit-scrollbar-track {
-  background: #1F2937;
-}
-
-body::-webkit-scrollbar-thumb,
-.podcast-container::-webkit-scrollbar-thumb,
-.sidebar-scroll::-webkit-scrollbar-thumb,
-.form-scroll::-webkit-scrollbar-thumb {
-  background-color: #4B5563;
-  border-radius: 10px;
-}
-
-/* 🔥 Scroll-snap custom for horizontal sliders */
+/* Scroll-snap for horizontal sliders */
 .scroll-container {
   display: flex;
   overflow-x: auto;
