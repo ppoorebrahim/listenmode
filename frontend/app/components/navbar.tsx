@@ -50,10 +50,12 @@ export default function Navbar() {
       </div>
 
       <div className="hidden md:flex items-center gap-3">
-        <button className="h-9 text-sm rounded-full bg-primary px-4 text-white hover:bg-primary/90 flex items-center transition">
-          <Plus className="mr-1 h-4 w-4" />
-          <span>Upload</span>
-        </button>
+          <Link
+             href="/upload"
+             className="h-9 text-sm rounded-full bg-primary px-4 text-white hover:bg-primary/90 flex items-center transition">
+            <Plus className="mr-1 h-4 w-4" />
+            <span>Upload</span>
+          </Link>
         <button className="text-gray-400 hover:text-primary p-2 transition">
           <Bell className="h-5 w-5" />
         </button>
