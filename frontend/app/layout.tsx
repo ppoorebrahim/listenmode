@@ -1,9 +1,8 @@
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Navbar from "@/components/navbar"
 import { AudioPlayerProvider } from "@/components/AudioPlayerProvider"
 import Providers from "./providers"
-import LayoutStructure from "./components/LayoutStructure"
+import AppShell from "./components/LayoutStructure"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -18,10 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className} bg-black text-white`}>
         <Providers>
           <AudioPlayerProvider>
-            <Navbar />
-            <LayoutStructure>
+            <AppShell>
               {children}
-            </LayoutStructure>
+            </AppShell>
           </AudioPlayerProvider>
         </Providers>
       </body>
