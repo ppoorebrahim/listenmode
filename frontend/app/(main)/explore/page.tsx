@@ -159,7 +159,7 @@ export default function ExplorePage() {
                 href={`/explore/${encodeURIComponent(category)}`}
                 className="scroll-item shrink-0 flex items-center justify-center px-4 text-sm text-white border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 rounded-lg"
                 style={{
-                    height: "326px",  // ارتفاع 332px
+                    height: "324px",  // ارتفاع 332px
                     width: "170px",   // عرض 170px
                 }}
                 >
