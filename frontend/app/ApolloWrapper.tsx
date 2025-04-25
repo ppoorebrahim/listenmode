@@ -1,15 +1,18 @@
-"use client";
+"use client"
 
-import { useMemo, PropsWithChildren } from "react";
-import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from "@apollo/client"
+import { useMemo } from "react"
 
-export default function ApolloWrapper({ children }: PropsWithChildren) {
-  const client = useMemo(() => new ApolloClient({
-    link: new HttpLink({
-      uri: process.env.NEXT_PUBLIC_API_URL || 'http://backend:4000/graphql',
-    }),
-    cache: new InMemoryCache(),
-  }), []);
+export default function ApolloWrapper({ children }: { children: React.ReactNode }) {
+  const client = useMemo(() => {
+    return new ApolloClient({
+      link: new HttpLink({
+        uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || "/api/graphql",
+        credentials: "same-origin",
+      }),
+      cache: new InMemoryCache(),
+    })
+  }, [])
 
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return <ApolloProvider client={client}>{children}</ApolloProvider>
 }

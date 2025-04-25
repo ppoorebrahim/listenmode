@@ -2,16 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-.podcast-container {
+:root {
+  --vh: 1vh;
+}
+
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollable but hidden scrollbars globally */
+.scrollbar-none,
+.sidebar-scroll,
+.podcast-container,
+.form-scroll,
+.scrollable-container {
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar,
+.sidebar-scroll::-webkit-scrollbar,
+.podcast-container::-webkit-scrollbar,
+.form-scroll::-webkit-scrollbar,
+.scrollable-container::-webkit-scrollbar {
+  display: none;
+}
+
+.podcast-container {
   height: calc(100vh - 4rem);
   padding-bottom: 5rem;
 }
 
+@media (max-width: 768px) {
+  .podcast-container {
+    overflow-y: auto;
+  }
+}
+
 .mobile-podcast-container {
+  height: calc(var(--vh, 1vh) * 100 - 8rem);
   overflow-y: auto;
-  height: calc(100vh - 8rem);
-  padding-bottom: 5rem;
+  padding: 0.5rem 0 5rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -20,34 +62,23 @@
   display: none;
 }
 
-/* 🔥 دارک اسکرول گلوبال برای کل سایت */
-body,
-html,
-.podcast-container,
-.sidebar-scroll,
-.form-scroll {
-  scrollbar-color: #4B5563 #1F2937;
-  scrollbar-width: thin;
+/* Scroll-snap for horizontal sliders */
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-body::-webkit-scrollbar,
-.podcast-container::-webkit-scrollbar,
-.sidebar-scroll::-webkit-scrollbar,
-.form-scroll::-webkit-scrollbar {
-  width: 6px;
+.scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
-body::-webkit-scrollbar-track,
-.podcast-container::-webkit-scrollbar-track,
-.sidebar-scroll::-webkit-scrollbar-track,
-.form-scroll::-webkit-scrollbar-track {
-  background: #1F2937;
-}
-
-body::-webkit-scrollbar-thumb,
-.podcast-container::-webkit-scrollbar-thumb,
-.sidebar-scroll::-webkit-scrollbar-thumb,
-.form-scroll::-webkit-scrollbar-thumb {
-  background-color: #4B5563;
-  border-radius: 10px;
+.scroll-item {
+  flex: none;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }

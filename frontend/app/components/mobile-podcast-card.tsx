@@ -7,7 +7,7 @@ import { useAudioPlayer } from "@/components/AudioPlayerProvider"
 export default function MobilePodcastCard({ podcast }) {
   const [liked, setLiked] = useState(false)
   const [bookmarked, setBookmarked] = useState(false)
-  const { setAudio } = useAudioPlayer()
+  const { setAudio, showPlayer } = useAudioPlayer() // ✅ اضافه کردن showPlayer
 
   const {
     id,
@@ -20,16 +20,23 @@ export default function MobilePodcastCard({ podcast }) {
     comments,
     views,
     timeAgo,
+    file_url,
   } = podcast
 
   const handlePlay = () => {
+    if (!file_url) {
+      console.warn("No audio file_url found", { podcast }); // ✅ دیباگ
+      return;
+    }
+    console.log("Playing podcast with file_url:", file_url); // ✅ دیباگ
     setAudio({
-      audioUrl: podcast.file_url || "",
+      audioUrl: file_url,
       title: title,
       show: channel,
       duration: duration,
       thumbnailUrl: thumbnail || "/placeholder.svg",
     })
+    showPlayer(); // ✅ فراخوانی showPlayer برای اطمینان از نمایش پلیر
   }
 
   const toggleLike = () => {
@@ -37,9 +44,9 @@ export default function MobilePodcastCard({ podcast }) {
   }
 
   return (
-    <div className="mb-5 border-b border-[#272727] pb-6">
-      <div className="flex">
-        <div className="relative mr-4 h-28 w-28 flex-shrink-0 overflow-hidden rounded-lg">
+    <div className="mb-5 border-b border-[#272727] pb-[0.9rem]">
+      <div className="flex ml-[2px]">
+        <div className="relative mt-[-4px] mr-0 h-32 w-32 flex-shrink-0 overflow-hidden rounded-lg">
           <img
             src={thumbnail || "/placeholder.svg"}
             alt={title}
@@ -48,16 +55,19 @@ export default function MobilePodcastCard({ podcast }) {
           <div className="absolute inset-0 flex items-center justify-center">
             <button
               onClick={handlePlay}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4639B3]/80 text-white"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-[#4639B3]/30 text-white backdrop-blur-md shadow-md"
             >
               <Play className="h-6 w-6" />
             </button>
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col">
-          <h3 className="mb-2 line-clamp-2 text-sm font-medium text-white">{title}</h3>
-          <div className="mb-3 flex items-center">
+        <div className="flex flex-1 flex-col pl-[12px] pb-1">
+          <h3 className="mb-[10px] line-clamp-2 text-sm font-medium text-white relative left-[-2px]">
+            {title}
+          </h3>
+          <div className="flex items-center gap-2 mt-14 relative left-[-2px]">
+            <div className="h-6 w-6 rounded-full bg-gray-600" />
             <span className="text-xs text-gray-400">{channel}</span>
           </div>
         </div>
@@ -66,26 +76,23 @@ export default function MobilePodcastCard({ podcast }) {
           onClick={() => setBookmarked(!bookmarked)}
           className={`ml-2 self-start ${bookmarked ? "text-[#33AAA4]" : "text-gray-400"}`}
         >
-          <Bookmark className="h-5 w-5" fill={bookmarked ? "#F5F5F5" : "none"} />
+          <Bookmark className="h-6 w-6" fill={bookmarked ? "#F5F5F5" : "none"} />
         </button>
       </div>
 
-      <div className="mt-5 flex items-center justify-between px-1 text-sm text-gray-400">
-        <div className="flex items-center space-x-5">
-          <button
-            onClick={toggleLike}
-            className="flex items-center gap-1 hover:text-[#4639B3]"
-          >
+      <div className="mt-4 ml-[-2px] flex items-center justify-between px-1 text-sm text-gray-400">
+        <div className="flex items-center gap-6">
+          <button onClick={toggleLike} className="flex items-center gap-1 hover:text-[#4639B3]">
             <Heart className="h-5 w-5" fill={liked ? "red" : "none"} />
-            <span>{likes}</span>
+            <span>{Math.min(likes, 99)}</span>
           </button>
           <div className="flex items-center gap-1">
             <MessageSquare className="h-5 w-5" />
-            <span>{comments}</span>
+            <span>{Math.min(comments, 99)}</span>
           </div>
           <div className="flex items-center gap-1">
             <Play className="h-5 w-5" />
-            <span>{views}</span>
+            <span>{Math.min(views, 99)}</span>
           </div>
           <div className="flex items-center gap-1">
             <Clock className="h-5 w-5" />

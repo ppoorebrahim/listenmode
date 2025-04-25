@@ -38,85 +38,99 @@ export default function Player_MobileView() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<HTMLDivElement | null>(null)
 
+  // لاگ برای دیباگ
+  console.log("Player_MobileView DEBUG => visible:", visible, "audioUrl:", audioUrl, "isPlaying:", isPlaying)
+
   useEffect(() => {
-    if (!audioUrl) {
-      console.log("No audio URL provided");
-      return;
+    if (!audioUrl || !visible) {
+      console.warn("No audio URL or player not visible")
+      return
     }
 
-    const audio = new Audio(audioUrl);
-    audioRef.current = audio;
+    const audio = new Audio(audioUrl)
+    audioRef.current = audio
 
-    const update = () => setCurrentTime(audio.currentTime);
-    const handleEnded = () => setCurrentTime(0);
+    const update = () => setCurrentTime(audio.currentTime)
+    const handleEnded = () => setCurrentTime(0)
     const handleDurationChange = () => {
       if (audio.duration && !isNaN(audio.duration)) {
-        setDuration(audio.duration);
+        setDuration(audio.duration)
       }
-    };
+    }
 
-    audio.addEventListener("timeupdate", update);
-    audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("durationchange", handleDurationChange);
-    audio.addEventListener("loadedmetadata", handleDurationChange);
+    audio.addEventListener("timeupdate", update)
+    audio.addEventListener("ended", handleEnded)
+    audio.addEventListener("durationchange", handleDurationChange)
+    audio.addEventListener("loadedmetadata", handleDurationChange)
 
-    audio.play().catch((err) => {
-      console.error("Audio play error:", err);
-    });
+    if (isPlaying) {
+      audio.play().catch((err) => {
+        console.error("Audio play error:", err)
+      })
+    }
 
     return () => {
-      audio.pause();
-      audio.removeEventListener("timeupdate", update);
-      audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("durationchange", handleDurationChange);
-      audio.removeEventListener("loadedmetadata", handleDurationChange);
-    };
-  }, [audioUrl]);
+      audio.pause()
+      audio.removeEventListener("timeupdate", update)
+      audio.removeEventListener("ended", handleEnded)
+      audio.removeEventListener("durationchange", handleDurationChange)
+      audio.removeEventListener("loadedmetadata", handleDurationChange)
+    }
+  }, [audioUrl, visible, isPlaying])
+
+  useEffect(() => {
+    if (audioRef.current) {
+      isPlaying ? audioRef.current.play().catch(() => {}) : audioRef.current.pause()
+    }
+  }, [isPlaying])
 
   const togglePlaybackRate = () => {
-    const nextIndex = (rateIndex + 1) % playbackRates.length;
-    setRateIndex(nextIndex);
+    const nextIndex = (rateIndex + 1) % playbackRates.length
+    setRateIndex(nextIndex)
     if (audioRef.current) {
-      audioRef.current.playbackRate = playbackRates[nextIndex];
+      audioRef.current.playbackRate = playbackRates[nextIndex]
     }
-  };
+  }
 
   const formatTime = (time: number) => {
-    if (!time || isNaN(time)) return "00:00";
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
+    if (!time || isNaN(time)) return "00:00"
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`
+  }
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!progressRef.current || !audioRef.current || !duration) return;
-    const rect = progressRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const percent = clickX / rect.width;
-    const newTime = percent * duration;
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
-  };
+    if (!progressRef.current || !audioRef.current || !duration) return
+    const rect = progressRef.current.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const percent = clickX / rect.width
+    const newTime = percent * duration
+    audioRef.current.currentTime = newTime
+    setCurrentTime(newTime)
+  }
 
   const skip = (seconds: number) => {
     if (audioRef.current) {
-      let next = audioRef.current.currentTime + seconds;
-      if (next < 0) next = 0;
-      if (next > duration) next = duration;
-      audioRef.current.currentTime = next;
-      setCurrentTime(next);
+      let next = audioRef.current.currentTime + seconds
+      if (next < 0) next = 0
+      if (next > duration) next = duration
+      audioRef.current.currentTime = next
+      setCurrentTime(next)
     }
-  };
+  }
 
   const handlePreviousTrack = () => {
-    console.log("Previous track clicked");
-  };
+    console.log("Previous track clicked")
+  }
 
   const handleNextTrack = () => {
-    console.log("Next track clicked");
-  };
+    console.log("Next track clicked")
+  }
 
-  if (!visible) return null;
+  if (!visible || !audioUrl) {
+    console.warn("Player not rendered: visible or audioUrl missing")
+    return null
+  }
 
   return (
     <>
@@ -124,14 +138,14 @@ export default function Player_MobileView() {
         <>
           {console.log("Rendering minimized player")}
           <div className="fixed bottom-[56px] left-0 right-0 z-[60] bg-[#1A1A1A] text-[#F5F5F5] md:hidden">
-            <audio src={audioUrl} autoPlay preload="metadata" />
+            <audio ref={audioRef} src={audioUrl} preload="metadata" />
 
             <div className="h-[64px] flex items-center justify-between px-3">
               <div className="flex items-center gap-2 overflow-hidden">
                 <button
                   onClick={() => {
-                    console.log("ChevronUp clicked, setting isExpanded to true");
-                    setIsExpanded(true);
+                    console.log("ChevronUp clicked, setting isExpanded to true")
+                    setIsExpanded(true)
                   }}
                   className="text-white hover:text-[#4639B3]"
                 >
@@ -192,7 +206,7 @@ export default function Player_MobileView() {
         <>
           {console.log("Rendering full-screen player")}
           <div className="fixed inset-0 z-[100] flex flex-col bg-[#1A1A1A]">
-            <audio src={audioUrl} autoPlay preload="metadata" />
+            <audio ref={audioRef} src={audioUrl} preload="metadata" />
             <div className="absolute top-4 left-4 z-50">
               <button onClick={() => setIsExpanded(false)} className="text-white">
                 <ChevronDown className="h-6 w-6" />
@@ -203,7 +217,7 @@ export default function Player_MobileView() {
               <div className="absolute top-[15%] flex flex-col items-center">
                 <div className="relative mx-auto aspect-square w-[63vw] max-w-[63vw] max-h-[63vw] mb-2 overflow-hidden rounded-lg">
                   <Image
-                    src="/placeholder.svg"
+                    src={thumbnailUrl || "/placeholder.svg"}
                     alt={title}
                     fill
                     className="object-cover"

@@ -19,16 +19,16 @@ const playbackRates = [0.5, 1, 1.5, 2]
 
 export default function AudioPlayer() {
   const {
-    audioUrl,
-    title,
-    show,
-    visible,
-    closePlayer,
+    audio,
+    isVisible,
+    hidePlayer,
+    audioRef,
   } = useAudioPlayer()
 
-  const audioRef = useRef<HTMLAudioElement>(null)
-  const progressRef = useRef<HTMLDivElement>(null)
+  // ✅ دیباگ وضعیت نمایش پلیر
+  console.log("AudioPlayer DEBUG => isVisible:", isVisible, "audio:", audio)
 
+  const progressRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [volume, setVolume] = useState(1)
   const [rateIndex, setRateIndex] = useState(1)
@@ -38,24 +38,20 @@ export default function AudioPlayer() {
   const [liked, setLiked] = useState(false)
 
   useEffect(() => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime)
-    const handleDurationChange = () => setDuration(audio.duration)
-    const handleEnded = () => {
+    const audioEl = audioRef.current
+    if (!audioEl) return
+    const update = () => setCurrentTime(audioEl.currentTime)
+    const onEnd = () => {
       setIsPlaying(false)
       setCurrentTime(0)
     }
-
-    audio.addEventListener("timeupdate", handleTimeUpdate)
-    audio.addEventListener("durationchange", handleDurationChange)
-    audio.addEventListener("ended", handleEnded)
-
+    audioEl.addEventListener("timeupdate", update)
+    audioEl.addEventListener("durationchange", () => setDuration(audioEl.duration))
+    audioEl.addEventListener("ended", onEnd)
     return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate)
-      audio.removeEventListener("durationchange", handleDurationChange)
-      audio.removeEventListener("ended", handleEnded)
+      audioEl.removeEventListener("timeupdate", update)
+      audioEl.removeEventListener("durationchange", () => {})
+      audioEl.removeEventListener("ended", onEnd)
     }
   }, [])
 
@@ -67,100 +63,86 @@ export default function AudioPlayer() {
   }, [volume, isMuted])
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = audioUrl
+    if (audioRef.current && audio?.audioUrl) {
+      audioRef.current.src = audio.audioUrl
       audioRef.current.play().catch(() => {})
       setIsPlaying(true)
     }
-  }, [audioUrl])
+  }, [audio?.audioUrl])
 
-  if (!visible) return null
+  // ✅ شرط نمایش پلیر
+  if (!isVisible || !audio?.audioUrl) return null
 
   const togglePlayPause = () => {
     if (!audioRef.current) return
-    if (isPlaying) {
-      audioRef.current.pause()
-    } else {
-      audioRef.current.play().catch(() => {})
-    }
+    isPlaying ? audioRef.current.pause() : audioRef.current.play()
     setIsPlaying(!isPlaying)
   }
 
   const togglePlaybackRate = () => {
-    const nextIndex = (rateIndex + 1) % playbackRates.length
-    setRateIndex(nextIndex)
-    if (audioRef.current) {
-      audioRef.current.playbackRate = playbackRates[nextIndex]
-    }
+    const next = (rateIndex + 1) % playbackRates.length
+    setRateIndex(next)
+    if (audioRef.current) audioRef.current.playbackRate = playbackRates[next]
   }
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value)
-    setVolume(newVolume)
-    setIsMuted(newVolume === 0) // Mute if volume is 0
+  const handleVolumeChange = e => {
+    const v = parseFloat(e.target.value)
+    setVolume(v)
+    setIsMuted(v === 0)
   }
 
-  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleProgressClick = e => {
     if (!progressRef.current || !audioRef.current) return
     const rect = progressRef.current.getBoundingClientRect()
-    const clickPosition = (e.clientX - rect.left) / rect.width
-    const newTime = clickPosition * duration
+    const click = (e.clientX - rect.left) / rect.width
+    const newTime = click * duration
     audioRef.current.currentTime = newTime
     setCurrentTime(newTime)
   }
 
   const skipForward = () => {
     if (audioRef.current) {
-      const newTime = Math.min(audioRef.current.currentTime + 15, duration)
-      audioRef.current.currentTime = newTime
-      setCurrentTime(newTime)
+      const t = Math.min(audioRef.current.currentTime + 15, duration)
+      audioRef.current.currentTime = t
+      setCurrentTime(t)
     }
   }
 
   const skipBackward = () => {
     if (audioRef.current) {
-      const newTime = Math.max(audioRef.current.currentTime - 5, 0)
-      audioRef.current.currentTime = newTime
-      setCurrentTime(newTime)
+      const t = Math.max(audioRef.current.currentTime - 5, 0)
+      audioRef.current.currentTime = t
+      setCurrentTime(t)
     }
   }
 
-  const formatTime = (time: number) => {
+  const formatTime = time => {
     if (!time || isNaN(time)) return "00:00"
-    const minutes = Math.floor(time / 60)
-    const seconds = Math.floor(time % 60)
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+    const m = Math.floor(time / 60)
+    const s = Math.floor(time % 60)
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`
   }
 
   return (
     <div className="hidden md:flex fixed bottom-0 left-0 right-0 h-[80px] bg-[#1A1A1A] text-[#F5F5F5] shadow-lg px-4 items-center justify-between z-50">
       <audio ref={audioRef} preload="metadata" />
-
-      {/* Title Section */}
       <div className="flex items-center gap-3">
         <div className="w-14 h-14 bg-[#272727] rounded-xl flex items-center justify-center">
           <div className="w-8 h-8 bg-[#4639B3] rounded-full" />
         </div>
         <div className="flex flex-col">
-          <h3 className="text-sm font-semibold truncate">{title}</h3>
-          <span className="text-xs text-gray-400 mt-1">{show}</span>
+          <h3 className="text-sm font-semibold truncate">{audio.title}</h3>
+          <span className="text-xs text-gray-400 mt-1">{audio.show}</span>
         </div>
       </div>
 
-      {/* Center Controls */}
       <div className="flex flex-col items-center flex-1 px-4">
         <div className="flex items-center gap-3 mb-1">
           <button onClick={skipBackward} className="p-2 hover:bg-[#4639B3] rounded-full">
             <Rewind size={20} />
           </button>
-          <button className="p-2 hover:bg-[#4639B3] rounded-full">
-            <SkipBack size={20} />
-          </button>
           <button onClick={togglePlayPause} className="p-2 hover:bg-[#4639B3] rounded-full">
             {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-          </button>
-          <button className="p-2 hover:bg-[#4639B3] rounded-full">
-            <SkipForward size={20} />
           </button>
           <button onClick={skipForward} className="p-2 hover:bg-[#4639B3] rounded-full">
             <FastForward size={20} />
@@ -182,7 +164,6 @@ export default function AudioPlayer() {
         </div>
       </div>
 
-      {/* Side Controls */}
       <div className="flex items-center gap-3">
         <button onClick={togglePlaybackRate} className="text-xs border border-[#343434] px-2 py-1 rounded hover:bg-[#4639B3] hidden lg:block">
           {playbackRates[rateIndex]}x
@@ -204,7 +185,7 @@ export default function AudioPlayer() {
         <button onClick={() => setLiked(!liked)} className="hover:text-[#4639B3]">
           <Heart size={20} fill={liked ? "red" : "none"} />
         </button>
-        <button onClick={closePlayer} className="p-2 hover:bg-[#4639B3] rounded-full" aria-label="Close player">
+        <button onClick={hidePlayer} className="p-2 hover:bg-[#4639B3] rounded-full" aria-label="Close player">
           <X size={20} />
         </button>
       </div>

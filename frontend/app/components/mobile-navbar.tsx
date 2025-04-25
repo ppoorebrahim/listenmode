@@ -1,28 +1,37 @@
 "use client"
 
 import Link from "next/link"
-import { Search, Bookmark, User, Headphones } from 'lucide-react'
+import { usePathname } from "next/navigation"
+import { Home, Search, Bookmark, User } from "lucide-react"
+import clsx from "clsx"
+
+const navItems = [
+  { href: "/", icon: Home },
+  { href: "/search", icon: Search },
+  { href: "/bookmarks", icon: Bookmark },
+  { href: "/auth", icon: User },
+]
 
 export default function MobileNavbar() {
+  const pathname = usePathname()
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-gray-800 bg-gray-900 px-4 md:hidden">
-      <Link href="/" className="flex items-center justify-center text-purple-500">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#4639B3]">
-          <Headphones className="h-4 w-4 text-white" />
-        </div>
-      </Link>
-
-      <Link href="/search" className="flex items-center justify-center text-gray-400 hover:text-[#4639B3]">
-        <Search className="h-6 w-6" />
-      </Link>
-
-      <Link href="/bookmarks" className="flex items-center justify-center text-gray-400 hover:text-[#4639B3]">
-        <Bookmark className="h-6 w-6" />
-      </Link>
-
-      <Link href="/auth" className="flex items-center justify-center text-gray-400 hover:text-[#4639B3]">
-        <User className="h-6 w-6" />
-      </Link>
+    <div className="fixed bottom-0 left-0 right-0 z-50 grid grid-cols-4 h-16 items-center bg-[#1A1A1A]/10 backdrop-blur-[16px] md:hidden">
+      {navItems.map(({ href, icon: Icon }) => {
+        const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href)
+        return (
+          <Link
+            key={href}
+            href={href}
+            className={clsx(
+              "flex items-center justify-center h-full transition",
+              isActive ? "text-[#4639B3]" : "text-white/70 hover:text-[#4639B3]"
+            )}
+          >
+            <Icon className="h-6 w-6" />
+          </Link>
+        )
+      })}
     </div>
   )
 }
