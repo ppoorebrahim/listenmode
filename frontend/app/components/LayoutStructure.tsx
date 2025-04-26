@@ -36,7 +36,11 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
       )}
     >
       {/* Top Navbar */}
-      {!hideTopNavbar && <div className="md:hidden fixed top-0 left-0 right-0 z-50"><Navbar /></div>}
+      {!hideTopNavbar && (
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <Navbar />
+        </div>
+      )}
 
       <div className="flex flex-1 relative">
         {!isAuthPage && <Sidebar />}
