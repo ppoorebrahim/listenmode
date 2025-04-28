@@ -9,7 +9,7 @@ const navItems = [
   { href: "/", icon: Home },
   { href: "/search", icon: Search },
   { href: "/bookmarks", icon: Bookmark },
-  { href: "/auth", icon: User },
+  { href: "/me", icon: User }, // لینک به صفحه پروفایل
 ]
 
 export default function MobileNavbar() {

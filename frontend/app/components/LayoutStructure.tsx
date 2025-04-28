@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Sidebar from "@/components/sidebar";
 import MobileNavbar from "@/components/mobile-navbar";
-import Player_MobileView from "@/components/Player_MobileView";
 import AudioPlayer from "@/components/AudioPlayer";
 import Navbar from "@/components/navbar";
 import clsx from "clsx";
@@ -23,9 +22,18 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
   const isAuthPage = pathname?.startsWith('/auth');
   const isHomePage = pathname === "/";
   const isUploadPage = pathname === "/upload";
+  const isProfilePage = pathname === "/me";
+
   const disableScrollbarOnMobile = ["/search", "/bookmarks", "/auth"].some(p => pathname.startsWith(p));
 
-  const hideTopNavbar = isMobile && isUploadPage;
+  // ✅ اصلاح شرط مخفی کردن نوبار بالایی در موبایل
+  const hideTopNavbar = isMobile && (
+    isUploadPage ||
+    isProfilePage ||
+    pathname.startsWith("/podcast") ||
+    pathname.startsWith("/episode")
+  );
+
   const hideBottomNavbar = isMobile && isUploadPage;
 
   return (
@@ -61,7 +69,6 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
       {!hideBottomNavbar && (
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
           <MobileNavbar />
-          <Player_MobileView />
         </div>
       )}
 
