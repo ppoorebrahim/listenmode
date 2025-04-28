@@ -1,10 +1,10 @@
 "use client";
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/sidebar";
 import MobileNavbar from "@/components/mobile-navbar";
-import AudioPlayer from "@/components/AudioPlayer";
+import AudioPlayerWrapper from "@/components/AudioPlayerWrapper";
 import Navbar from "@/components/navbar";
 import clsx from "clsx";
 
@@ -15,24 +15,25 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isAuthPage = pathname?.startsWith('/auth');
+  const isAuthPage = pathname?.startsWith("/auth");
   const isHomePage = pathname === "/";
   const isUploadPage = pathname === "/upload";
   const isProfilePage = pathname === "/me";
 
-  const disableScrollbarOnMobile = ["/search", "/bookmarks", "/auth"].some(p => pathname.startsWith(p));
-
-  // ✅ اصلاح شرط مخفی کردن نوبار بالایی در موبایل
-  const hideTopNavbar = isMobile && (
-    isUploadPage ||
-    isProfilePage ||
-    pathname.startsWith("/podcast") ||
-    pathname.startsWith("/episode")
+  const disableScrollbarOnMobile = ["/search", "/bookmarks", "/auth"].some((p) =>
+    pathname.startsWith(p)
   );
+
+  const hideTopNavbar =
+    isMobile &&
+    (isUploadPage ||
+      isProfilePage ||
+      pathname.startsWith("/podcast") ||
+      pathname.startsWith("/episode"));
 
   const hideBottomNavbar = isMobile && isUploadPage;
 
@@ -50,6 +51,7 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
         </div>
       )}
 
+      {/* Main Content Area */}
       <div className="flex flex-1 relative">
         {!isAuthPage && <Sidebar />}
         <main
@@ -67,15 +69,17 @@ export default function LayoutStructure({ children }: { children: React.ReactNod
 
       {/* Mobile Bottom Navbar */}
       {!hideBottomNavbar && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-40">
           <MobileNavbar />
         </div>
       )}
 
-      {/* Desktop Audio Player */}
-      <div className="hidden md:fixed md:bottom-0 md:left-0 md:right-0 md:z-50 md:block">
-        <AudioPlayer />
-      </div>
+      {/* Audio Player (Mobile & Desktop) */}
+      {!hideBottomNavbar && (
+        <div className="fixed bottom-0 left-0 right-0 z-50">
+          <AudioPlayerWrapper />
+        </div>
+      )}
     </div>
   );
 }

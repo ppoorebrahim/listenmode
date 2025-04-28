@@ -13,7 +13,7 @@ interface AudioContextProps {
   audioUrl: string;
   title: string;
   show: string;
-  duration?: number; // ✅ duration رو به صورت عددی تعریف کردیم
+  duration?: number;
   thumbnailUrl: string;
 }
 
@@ -41,12 +41,12 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
   const showPlayer = () => setIsVisible(true);
 
   const hidePlayer = () => {
-    setIsVisible(false);
-    _setAudio(null);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+    _setAudio(null);
+    setIsVisible(false);
     setPlaying(false);
   };
 
@@ -54,11 +54,9 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
     const el = audioRef.current;
     if (!el) return;
     if (el.paused) {
-      el.play().then(() => {
-        setPlaying(true);
-      }).catch((err) => {
-        console.error("❌ togglePlay error:", err);
-      });
+      el.play()
+        .then(() => setPlaying(true))
+        .catch((err) => console.error("❌ togglePlay error:", err));
     } else {
       el.pause();
       setPlaying(false);
@@ -115,21 +113,18 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
 
     const onLoadedMetadata = () => {
       if (!audio) return;
-
       const duration = el.duration || 0;
       console.log("🎯 loadedmetadata, duration:", duration);
-
-      _setAudio(prev => prev ? { ...prev, duration } : null); // ✅ درست شد
+      _setAudio(prev => prev ? { ...prev, duration } : null);
     };
 
     const onEnded = () => {
-      _setAudio(null);
-      setIsVisible(false);
-      setPlaying(false);
+      hidePlayer(); // پلیر بعد از پایان خودکار بسته شود
     };
 
     el.addEventListener("loadedmetadata", onLoadedMetadata);
     el.addEventListener("ended", onEnded);
+
     return () => {
       el.removeEventListener("loadedmetadata", onLoadedMetadata);
       el.removeEventListener("ended", onEnded);
@@ -140,7 +135,7 @@ export const AudioPlayerProvider = ({ children }: { children: ReactNode }) => {
     <AudioPlayerContext.Provider
       value={{
         audio,
-        setAudio: _setAudio, // ✅ اکسپورت public
+        setAudio: _setAudio,
         isVisible,
         showPlayer,
         hidePlayer,
