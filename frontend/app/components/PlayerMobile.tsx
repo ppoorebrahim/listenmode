@@ -1,8 +1,10 @@
+// frontend/components/PlayerMobile.tsx
+
 "use client";
 
 import { useAudioPlayer } from "@/components/AudioPlayerProvider";
 import PlayPauseButton from "@/components/PlayPauseButton";
-import { usePlayButtonSize } from "@/hooks/usePlayButtonSize"; // ✅ اضافه شده
+import { usePlayButtonSize } from "@/hooks/usePlayButtonSize";
 import { ChevronUp, ChevronDown, X, Share2, Download, Heart, MessageCircle, RotateCw, RotateCcw } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
@@ -58,39 +60,39 @@ export default function PlayerMobile({
   return (
     <>
       {!isExpanded ? (
-        <div className="fixed bottom-[56px] left-0 right-0 z-50 flex items-center bg-[#1A1A1A] h-[64px] p-2 md:hidden">
+        <div className="fixed bottom-[56px] left-0 right-0 z-50 flex items-center bg-[#1A1A1A] h-[64px] p-0 md:hidden">
           <audio ref={audioRef} hidden />
 
-          <button onClick={() => setIsExpanded(true)} className="p-1">
+          <button onClick={() => setIsExpanded(true)} className="p-2">
             <ChevronUp size={18} className="text-white" />
           </button>
 
-          <div className="relative flex-1 flex items-center gap-2 mx-2 overflow-hidden">
-            <div className="relative w-10 h-10 rounded-md overflow-hidden flex-shrink-0">
+          <div className="relative flex-1 flex items-center gap-2 mx-0 overflow-hidden">
+            <div className="relative w-14 h-14 rounded-md overflow-hidden flex-shrink-0 ml-1">
               <Image
                 src={thumbnailUrl || "/placeholder.svg"}
                 alt="cover"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                 <PlayPauseButton isPlaying={playing} onToggle={togglePlay} size={miniButtonSize} />
               </div>
             </div>
 
             <div className="flex-1 overflow-hidden">
-              <div className="whitespace-nowrap animate-scrollText text-xs font-semibold text-white">
+              <div className="whitespace-nowrap animate-marquee text-xs font-semibold text-white">
                 {title}
               </div>
-              <div className="text-[10px] text-zinc-400 truncate">{show}</div>
+              <div className="mt-[2px] text-[10px] text-zinc-400 truncate">{show}</div>
             </div>
           </div>
 
-          <span className="text-xs w-12 text-center text-white">
+          <span className="text-xs w-12 text-center text-white p-2 mr-0">
             {formatTime(currentTime)}
           </span>
 
-          <button onClick={hidePlayer} className="p-1 ml-2">
+          <button onClick={hidePlayer} className="p-2 ml-0">
             <X size={18} className="text-white" />
           </button>
 
@@ -116,16 +118,16 @@ export default function PlayerMobile({
 
             <div className="flex items-center gap-4">
               <button className="p-2">
-                <Share2 size={22} className="text-white" />
+                <Share2 size={20} className="text-white" />
               </button>
-              <button onClick={hidePlayer} className="p-2">
+              <button onClick={hidePlayer} className="p-0">
                 <X size={24} className="text-white" />
               </button>
             </div>
           </div>
 
           <div className="flex-1 flex flex-col items-center">
-            <div className="relative w-[70vw] h-[70vw] max-w-[300px] max-h-[300px] mt-4 rounded-lg overflow-hidden">
+            <div className="relative w-[75vw] h-[75vw] max-w-[300px] max-h-[300px] mt-0 rounded-lg overflow-hidden">
               <Image
                 src={thumbnailUrl || "/placeholder.svg"}
                 alt="cover"
@@ -134,12 +136,12 @@ export default function PlayerMobile({
               />
             </div>
 
-            <div className="text-center mt-4 mb-6">
-              <div className="text-lg text-white font-bold truncate">{title}</div>
-              <div className="text-sm text-gray-400">{show}</div>
+            <div className="text-center mt-6 mb-6">
+              <div className="text-base text-white font-bold truncate">{title}</div>
+              <div className="text-sm text-gray-400 mt-[2px]">{show}</div>
             </div>
 
-            <div className="flex items-center justify-center gap-8 mb-6">
+            <div className="flex items-center justify-center gap-8 mt-6 mb-6">
               <div className="flex flex-col items-center">
                 <button onClick={() => {
                   if (audioRef.current) audioRef.current.currentTime -= 5;
@@ -161,21 +163,6 @@ export default function PlayerMobile({
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-6 mb-6">
-              <button onClick={toggleSpeed} className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
-                <span className="text-xs text-white">{playbackRate}x</span>
-              </button>
-              <button className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
-                <Download size={20} className="text-white" />
-              </button>
-              <button className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
-                <Heart size={20} className="text-white" />
-              </button>
-              <button className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
-                <MessageCircle size={20} className="text-white" />
-              </button>
-            </div>
-
             <div className="px-6 w-full">
               <div className="flex flex-col items-center">
                 <div
@@ -194,11 +181,22 @@ export default function PlayerMobile({
                     <div className="w-3 h-3 bg-white rounded-full" />
                   </div>
                 </div>
-                <div className="flex justify-between w-full text-xs text-white">
-                  <span>{formatTime(currentTime)}</span>
-                  <span>{formatTime(duration)}</span>
-                </div>
               </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-6 mt-6 mb-6">
+              <button className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
+                <Heart size={20} className="text-white" />
+              </button>
+              <button className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
+                <MessageCircle size={20} className="text-white" />
+              </button>
+              <button className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
+                <Download size={20} className="text-white" />
+              </button>
+              <button onClick={toggleSpeed} className="p-2 w-10 h-10 bg-[#343434] rounded-full flex items-center justify-center">
+                <span className="text-xs text-white">{playbackRate}x</span>
+              </button>
             </div>
 
           </div>
